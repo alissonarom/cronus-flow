@@ -11,6 +11,9 @@ export async function jwtMiddleware(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
+  if (request.method === 'OPTIONS') {
+    return
+  }
   const url = request.url.split('?')[0]
 
   if (PUBLIC_ROUTES.includes(url)) {

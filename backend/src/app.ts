@@ -9,18 +9,25 @@ export async function buildApp() {
     logger: true
   })
 
-//   await app.register(cors, {
-//   origin: [
-//     'https://apps-cronus-flow.ptiotg.easypanel.host',
-//     /^chrome-extension:\/\// // 🔴 ESSENCIAL
-//   ],
-//   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-//   allowedHeaders: ['Content-Type', 'Authorization'],
-// });
-
 await app.register(cors, {
-  origin: true
-});
+  origin: (origin, cb) => {
+    // Chrome Extension
+    if (!origin || origin.startsWith('chrome-extension://')) {
+      cb(null, true)
+      return
+    }
+
+    // Domínio do front (se existir)
+    if (origin === 'https://apps-cronus-flow.ptiotg.easypanel.host') {
+      cb(null, true)
+      return
+    }
+
+    cb(new Error('Not allowed by CORS'), false)
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+})
 
   app.addHook('onRequest', jwtMiddleware)
   registerRoutes(app)
