@@ -1,6 +1,7 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { generateSalesReply } from '../ai/ai.service.js'
 import { checkAndIncrementUsage } from '../usage/usage.service.js'
+import { saveAnalysis } from '../analysis/analysis.service.js'
 
 export async function analyzeController(
   request: FastifyRequest<{ Body: { leadMessage: string } }>,
@@ -16,6 +17,12 @@ export async function analyzeController(
   try {
     const usage = await checkAndIncrementUsage(userId)
     const replyText = await generateSalesReply({ leadMessage })
+
+    await saveAnalysis({
+    userId,
+    input: leadMessage,
+    output: replyText
+  })
 
     return {
       reply: replyText,
