@@ -15,8 +15,11 @@ export async function login(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
+  try {
   const { email, password } = request.body as any
-
   const result = await loginUser(email, password)
   return reply.send(result)
+  } catch (err) {
+    return reply.code(401).send({ message: 'Invalid credentials' })
+  }
 }

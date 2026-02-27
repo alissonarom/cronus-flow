@@ -20,6 +20,7 @@ export async function registerUser(email: string, password: string) {
 
 export async function loginUser(email: string, password: string) {
   const user = await User.findOne({ email })
+  console.log('USER:', user)
   if (!user) throw new Error('Invalid credentials')
 
   const valid = await bcrypt.compare(password, user.passwordHash)
