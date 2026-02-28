@@ -18,7 +18,7 @@ export async function analyzeController(
     const usage = await checkAndIncrementUsage(userId)
     const replyText = await generateSalesReply({ leadMessage })
 
-    await saveAnalysis({
+    const analysis = await saveAnalysis({
     userId,
     input: leadMessage,
     output: replyText
@@ -26,7 +26,8 @@ export async function analyzeController(
 
     return {
       reply: replyText,
-      remaining: usage.remaining
+      remaining: usage.remaining,
+      analysisId: analysis._id
     }
   } catch (err: any) {
     if (err.message === 'DAILY_LIMIT_EXCEEDED') {

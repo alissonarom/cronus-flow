@@ -21,8 +21,15 @@ const AnalysisSchema = new Schema(
 
     provider: {
       type: String,
-      default: 'deepseek'
-    }
+      default: 'Gemini'
+    },
+
+    converted: { 
+      type: Boolean,
+      default: null
+      },
+
+    feedbackAt: { type: Date }
   },
   {
     timestamps: true
