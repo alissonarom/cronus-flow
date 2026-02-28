@@ -29,8 +29,9 @@ await app.register(cors, {
   allowedHeaders: ['Content-Type', 'Authorization'],
 })
 
-  app.addHook('onRequest', jwtMiddleware)
   registerRoutes(app)
+  
+  app.addHook('onRequest', jwtMiddleware)
   app.register(analysisRoutes, { prefix: '/v1' })
   return app
 }
