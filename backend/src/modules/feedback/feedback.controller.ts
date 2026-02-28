@@ -5,14 +5,10 @@ export async function registerFeedback(
   request: FastifyRequest,
   reply: FastifyReply
 ) {
-  const { leadMessage, reply: output, converted } = request.body as any
+  const { analysisId, converted } = request.body as any
   const userId = request.user!.userId
 
-  const analysis = await Analysis.findOne({
-    userId,
-    input: leadMessage,
-    output
-  })
+  const analysis = await Analysis.findById(analysisId)
 
   if (!analysis) {
     return reply.code(404).send({ message: 'Analysis not found' })

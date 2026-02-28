@@ -2,6 +2,7 @@ import Fastify from 'fastify'
 import { registerRoutes } from './routes/index.js'
 import { jwtMiddleware } from './infra/jwt.middleware.js'
 import { analysisRoutes } from './modules/analysis/analysis.routes.js'
+import { feedbackRoutes } from './modules/feedback/feedback.routes.js'
 import cors from '@fastify/cors'
 
 export async function buildApp() {
@@ -34,6 +35,7 @@ await app.register(cors, {
   await app.register(async function protectedRoutes(instance) {
     instance.addHook('onRequest', jwtMiddleware)
     instance.register(analysisRoutes, { prefix: '/v1' })
+    instance.register(feedbackRoutes, { prefix: '/v1' })
   })
   
   return app
